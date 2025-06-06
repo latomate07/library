@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* PrimeVue custom styles */
+.p-button {
+    @apply font-medium;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    @apply bg-gray-50 border-b border-gray-200;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+    @apply border-b border-gray-100;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+    @apply bg-gray-50;
+}
+
+.p-card {
+    @apply shadow-sm border border-gray-200;
+}
+
+.p-toolbar {
+    @apply bg-gray-50 border border-gray-200;
+}
+
+.p-dialog .p-dialog-header {
+    @apply bg-gray-50 border-b border-gray-200;
+}
+
+.p-inputtext, .p-dropdown, .p-calendar, .p-inputnumber {
+    @apply border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500;
+}
+
+.p-inputtext:enabled:focus, .p-dropdown:not(.p-disabled).p-focus, .p-calendar:not(.p-disabled).p-focus {
+    @apply ring-2 ring-blue-500 ring-opacity-50;
+}
+
+.p-invalid {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-500;
+}
+
+.p-error {
+    @apply text-red-600 text-sm;
+}
+
+/* Custom utilities */
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+/* Navigation improvements */
+.nav-link-active {
+    @apply border-blue-500 text-blue-600;
+}
+
+.nav-link-inactive {
+    @apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300;
+}

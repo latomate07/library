@@ -1,30 +1,71 @@
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-</script>
-
 <template>
-    <Head title="Dashboard" />
-
     <AuthenticatedLayout>
         <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Dashboard
             </h2>
         </template>
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
-                >
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        You're logged in!
+                        <div class="mb-8">
+                            <h1 class="text-3xl font-bold text-gray-900 mb-4">
+                                📚 Library Management System
+                            </h1>
+                            <p class="text-lg text-gray-600">
+                                Welcome to your library management dashboard. Manage authors and books efficiently.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Authors Card -->
+                            <Card class="hover:shadow-lg transition-shadow duration-300">
+                                <template #content>
+                                    <div class="flex items-center p-6">
+                                        <div class="p-4 rounded-full bg-blue-100">
+                                            <i class="pi pi-users text-3xl text-blue-600"></i>
+                                        </div>
+                                        <div class="ml-6">
+                                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Authors</h3>
+                                            <p class="text-gray-600 mb-4">Manage author information and profiles</p>
+                                            <Button v-if="canView('authors')" label="View Authors"
+                                                icon="pi pi-arrow-right" @click="router.visit(route('authors.index'))"
+                                                class="p-button-outlined" />
+                                        </div>
+                                    </div>
+                                </template>
+                            </Card>
+
+                            <!-- Books Card -->
+                            <Card class="hover:shadow-lg transition-shadow duration-300">
+                                <template #content>
+                                    <div class="flex items-center p-6">
+                                        <div class="p-4 rounded-full bg-green-100">
+                                            <i class="pi pi-book text-3xl text-green-600"></i>
+                                        </div>
+                                        <div class="ml-6">
+                                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Books</h3>
+                                            <p class="text-gray-600 mb-4">Manage your book catalog and inventory</p>
+                                            <Button v-if="canView('books')" label="View Books" icon="pi pi-arrow-right"
+                                                @click="router.visit(route('books.index'))" class="p-button-outlined" />
+                                        </div>
+                                    </div>
+                                </template>
+                            </Card>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
+
+<script setup lang="ts">
+import { router } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { usePermissions } from '@/Utils/permissions';
+
+const { canView, canCreate } = usePermissions();
+</script>
