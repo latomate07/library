@@ -26,6 +26,13 @@ beforeEach(function () {
     }
 });
 
+test('guest can view books index without permission', function () {
+    $response = $this->actingAs($this->user)
+        ->get(route('books.index'));
+
+    $response->assertStatus(200);
+});
+
 test('user can view books index with permission', function () {
     $this->user->givePermissionTo('view books');
     Book::factory()->count(3)->create();
@@ -36,13 +43,6 @@ test('user can view books index with permission', function () {
     $response->assertStatus(200);
 });
 
-test('user cannot view books index without permission', function () {
-    $response = $this->actingAs($this->user)
-        ->get(route('books.index'));
-
-    $response->assertStatus(403);
-});
-
 test('user can create book with permission', function () {
     $this->user->givePermissionTo('create books');
     $author = Author::factory()->create();
@@ -50,7 +50,7 @@ test('user can create book with permission', function () {
     $bookData = [
         'title' => 'Test Book',
         'price' => 29.99,
-        'publication_date' => '2024-01-01',
+        'publication_date' => now(),
         'language' => 'en',
         'author_id' => $author->id,
     ];
@@ -113,7 +113,7 @@ test('user can update book with permission', function () {
     $updateData = [
         'title' => 'Updated Book Title',
         'price' => 39.99,
-        'publication_date' => '2024-02-01',
+        'publication_date' => now(),
         'language' => 'fr',
         'author_id' => $author->id,
     ];

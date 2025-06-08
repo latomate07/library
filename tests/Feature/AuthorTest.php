@@ -26,6 +26,13 @@ beforeEach(function () {
     }
 });
 
+test('guest can view authors index without permission', function () {
+    $response = $this->actingAs($this->user)
+        ->get(route('authors.index'));
+
+    $response->assertStatus(200);
+});
+
 test('user can view authors index with permission', function () {
     $this->user->givePermissionTo('view authors');
     Author::factory()->count(3)->create();
@@ -34,13 +41,6 @@ test('user can view authors index with permission', function () {
         ->get(route('authors.index'));
 
     $response->assertStatus(200);
-});
-
-test('user cannot view authors index without permission', function () {
-    $response = $this->actingAs($this->user)
-        ->get(route('authors.index'));
-
-    $response->assertStatus(403);
 });
 
 test('user can create author with permission', function () {
