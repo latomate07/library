@@ -144,7 +144,7 @@
         </main>
 
         <!-- Book Modal -->
-        <Dialog v-model:visible="bookModalVisible" :style="{ width: '50vw' }" :modal="true"
+        <Dialog v-model:visible="bookModalVisible" :style="{ width: isMobile ? '90vw' : '50vw' }" :modal="true"
             :header="selectedBook?.title">
             <div v-if="selectedBook" class="space-y-4">
                 <div class="flex items-start space-x-4">
@@ -189,7 +189,7 @@
         </Dialog>
 
         <!-- Author Modal -->
-        <Dialog v-model:visible="authorModalVisible" :style="{ width: '50vw' }" :modal="true"
+        <Dialog v-model:visible="authorModalVisible" :style="{ width: isMobile ? '90vw' : '50vw' }" :modal="true"
             :header="selectedAuthor?.full_name">
             <div v-if="selectedAuthor" class="space-y-4">
                 <div class="flex items-start space-x-4">
@@ -328,6 +328,10 @@ const openAuthorModal = (author: Author) => {
 const getInitials = (author: Author): string => {
     return `${author.first_name[0]}${author.last_name[0]}`;
 };
+
+const isMobile = computed(() => {
+    return window.innerWidth < 768;
+});
 
 // Infinite scroll
 const handleScroll = () => {

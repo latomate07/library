@@ -126,7 +126,7 @@
                     v-model:visible="authorDialog" 
                     :modal="true" 
                     :closable="true"
-                    :style="{ width: '50vw' }"
+                    :style="{ width: isMobile ? '90vw' : '50vw' }"
                     :header="dialogTitle"
                 >
                     <form @submit.prevent="saveAuthor" class="space-y-4">
@@ -235,7 +235,7 @@
                     v-model:visible="viewDialog" 
                     :modal="true" 
                     :closable="true"
-                    :style="{ width: '50vw' }"
+                    :style="{ width: isMobile ? '90vw' : '50vw' }"
                     header="Détails de l'Auteur"
                 >
                     <div v-if="selectedAuthor" class="space-y-4">
@@ -473,4 +473,8 @@ const onSearch = () => {
         replace: true
     });
 };
+
+const isMobile = computed(() => {
+    return window.innerWidth < 768;
+});
 </script>
