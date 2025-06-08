@@ -2,7 +2,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Books Management
+                Gestion des Livres
             </h2>
         </template>
 
@@ -12,12 +12,14 @@
                     <template #content>
                         <Toolbar class="mb-6">
                             <template #start>
-                                <h3 class="text-lg font-medium text-gray-900">Books</h3>
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    Livres
+                                </h3>
                             </template>
                             <template #end>
                                 <Button
                                     v-if="canCreate('books')"
-                                    label="Add Book"
+                                    label="Nouveau"
                                     icon="pi pi-plus"
                                     @click="openNew"
                                     class="p-button-success"
@@ -33,20 +35,22 @@
                             :lazy="true"
                             @page="onPage"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} books"
+                            currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} livres"
                             responsiveLayout="scroll"
                             :loading="loading"
                         >
                             <template #header>
                                 <div class="flex justify-between items-center mb-4">
-                                    <span class="text-xl text-900 font-bold">Books Library</span>
+                                    <span class="text-xl text-900 font-bold">
+                                        Liste des livres
+                                    </span>
                                     <div class="flex space-x-4">
                                         <Dropdown
                                             v-model="selectedAuthor"
                                             :options="authorOptions"
                                             optionLabel="label"
                                             optionValue="value"
-                                            placeholder="Filter by Author"
+                                            placeholder="Filtrer par auteur"
                                             class="w-64"
                                             @change="onAuthorFilter"
                                             showClear
@@ -54,7 +58,7 @@
                                         <InputGroup>
                                             <InputText 
                                                 v-model="searchTerm" 
-                                                placeholder="Search books..." 
+                                                placeholder="Trouver un livre..." 
                                                 @input="onSearch"
                                             />
                                             <InputGroupAddon>
@@ -65,7 +69,7 @@
                                 </div>
                             </template>
 
-                            <Column field="title" header="Book" sortable>
+                            <Column field="title" header="Livre" sortable>
                                 <template #body="slotProps">
                                     <div class="flex items-center space-x-3">
                                         <div class="flex-shrink-0 h-12 w-8">
@@ -85,7 +89,7 @@
                                 </template>
                             </Column>
 
-                            <Column field="author.full_name" header="Author" sortable>
+                            <Column field="author.full_name" header="Auteur" sortable>
                                 <template #body="slotProps">
                                     <div class="text-sm text-gray-900">
                                         {{ slotProps.data.author?.full_name }}
@@ -93,7 +97,7 @@
                                 </template>
                             </Column>
 
-                            <Column field="price" header="Price" sortable>
+                            <Column field="price" header="Prix" sortable>
                                 <template #body="slotProps">
                                     <Tag 
                                         :value="formatCurrency(slotProps.data.price)" 
@@ -102,13 +106,13 @@
                                 </template>
                             </Column>
 
-                            <Column field="publication_date" header="Publication Date" sortable>
+                            <Column field="publication_date" header="Date de publication" sortable>
                                 <template #body="slotProps">
                                     {{ formatDate(slotProps.data.publication_date) }}
                                 </template>
                             </Column>
 
-                            <Column field="language" header="Language">
+                            <Column field="language" header="Langue">
                                 <template #body="slotProps">
                                     <Tag 
                                         :value="slotProps.data.language.toUpperCase()" 
@@ -138,7 +142,7 @@
                                             icon="pi pi-trash"
                                             class="p-button-rounded p-button-text p-button-danger"
                                             @click="confirmDeleteBook(slotProps.data)"
-                                            v-tooltip="'Delete'"
+                                            v-tooltip="'Supprimer'"
                                         />
                                     </div>
                                 </template>
@@ -159,7 +163,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="field md:col-span-2">
                                 <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Title *
+                                    Titre *
                                 </label>
                                 <InputText
                                     id="title"
@@ -176,7 +180,7 @@
 
                             <div class="field">
                                 <label for="author_id" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Author *
+                                    Auteur *
                                 </label>
                                 <Dropdown
                                     id="author_id"
@@ -184,7 +188,7 @@
                                     :options="authors"
                                     optionLabel="full_name"
                                     optionValue="id"
-                                    placeholder="Select an author"
+                                    placeholder="Selectionner un auteur"
                                     :class="{ 'p-invalid': form.errors.author_id }"
                                     class="w-full"
                                     filter
@@ -203,6 +207,8 @@
                                     v-model="form.isbn"
                                     placeholder="9781234567890"
                                     :class="{ 'p-invalid': form.errors.isbn }"
+                                    maxlength="13"
+                                    minlength="10"
                                     class="w-full"
                                 />
                                 <small v-if="form.errors.isbn" class="p-error">
@@ -212,7 +218,7 @@
 
                             <div class="field">
                                 <label for="price" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Price ($) *
+                                    Prix ($) *
                                 </label>
                                 <InputNumber
                                     id="price"
@@ -231,7 +237,7 @@
 
                             <div class="field">
                                 <label for="publication_date" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Publication Date *
+                                    Date de publication *
                                 </label>
                                 <Calendar
                                     id="publication_date"
@@ -248,7 +254,7 @@
 
                             <div class="field">
                                 <label for="pages" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Pages
+                                    Nombre de pages
                                 </label>
                                 <InputNumber
                                     id="pages"
@@ -264,7 +270,7 @@
 
                             <div class="field">
                                 <label for="language" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Language *
+                                    Langue *
                                 </label>
                                 <Dropdown
                                     id="language"
@@ -272,7 +278,7 @@
                                     :options="languageOptions"
                                     optionLabel="label"
                                     optionValue="value"
-                                    placeholder="Select language"
+                                    placeholder="Selectionner une langue"
                                     :class="{ 'p-invalid': form.errors.language }"
                                     class="w-full"
                                 />
@@ -290,7 +296,7 @@
                                 id="description"
                                 v-model="form.description"
                                 rows="4"
-                                placeholder="Brief description of the book..."
+                                placeholder="Décrivez brièvement le livre..."
                                 :class="{ 'p-invalid': form.errors.description }"
                                 class="w-full"
                             />
@@ -302,13 +308,13 @@
 
                     <template #footer>
                         <Button 
-                            label="Cancel" 
+                            label="Annuler" 
                             icon="pi pi-times" 
                             @click="hideDialog" 
                             class="p-button-text" 
                         />
                         <Button 
-                            :label="isEditing ? 'Update' : 'Create'"
+                            :label="isEditing ? 'Mettre à jour' : 'Créer'"
                             icon="pi pi-check" 
                             @click="saveBook" 
                             :loading="form.processing"
@@ -322,7 +328,7 @@
                     :modal="true" 
                     :closable="true"
                     :style="{ width: '60vw' }"
-                    header="Book Details"
+                    header="Détails du Livre"
                 >
                     <div v-if="selectedBook" class="space-y-6">
                         <div class="flex items-start space-x-6 pb-6 border-b">
@@ -331,7 +337,7 @@
                             </div>
                             <div class="flex-1">
                                 <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ selectedBook.title }}</h3>
-                                <p class="text-lg text-gray-600 mb-2">by {{ selectedBook.author?.full_name }}</p>
+                                <p class="text-lg text-gray-600 mb-2">par {{ selectedBook.author?.full_name }}</p>
                                 <div class="flex space-x-4">
                                     <Tag :value="formatCurrency(selectedBook.price)" severity="success" />
                                     <Tag :value="selectedBook.language.toUpperCase()" severity="info" />
@@ -346,7 +352,7 @@
                                 <p class="text-gray-900">{{ selectedBook.isbn || 'Not available' }}</p>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-500 mb-1">Publication Date</label>
+                                <label class="block text-sm font-medium text-gray-500 mb-1">Date de publication</label>
                                 <p class="text-gray-900">{{ formatDate(selectedBook.publication_date) }}</p>
                             </div>
                         </div>
@@ -359,7 +365,7 @@
 
                     <template #footer>
                         <Button 
-                            label="Close" 
+                            label="Fermer" 
                             icon="pi pi-times" 
                             @click="viewDialog = false" 
                             class="p-button-text" 
@@ -429,14 +435,14 @@ watch(publicationDateModel, (newDate) => {
 
 // Computed properties
 const dialogTitle = computed(() => {
-    return isEditing.value ? 'Edit Book' : 'Add New Book';
+    return isEditing.value ? 'Modifier un livre' : 'Ajouter un Livre';
 });
 
 console.log('props.authors', props.authors);
 
 const authorOptions = computed(() => {
     return [
-        { label: 'All Authors', value: '' },
+        { label: 'Tous les auteurs', value: '' },
         ...props.authors.map(author => ({
             label: author.full_name,
             value: author.id.toString()
@@ -445,15 +451,15 @@ const authorOptions = computed(() => {
 });
 
 const languageOptions = [
-    { label: 'English', value: 'en' },
-    { label: 'French', value: 'fr' },
-    { label: 'Spanish', value: 'es' },
-    { label: 'German', value: 'de' },
-    { label: 'Italian', value: 'it' },
-    { label: 'Portuguese', value: 'pt' },
-    { label: 'Russian', value: 'ru' },
-    { label: 'Chinese', value: 'zh' },
-    { label: 'Japanese', value: 'ja' },
+    { label: 'Anglais', value: 'en' },
+    { label: 'Français', value: 'fr' },
+    { label: 'Espagnol', value: 'es' },
+    { label: 'Allemand', value: 'de' },
+    { label: 'Italien', value: 'it' },
+    { label: 'Portugais', value: 'pt' },
+    { label: 'Russe', value: 'ru' },
+    { label: 'Chinois', value: 'zh' },
+    { label: 'Japonais', value: 'ja' },
 ];
 
 // Methods
@@ -503,7 +509,7 @@ const saveBook = () => {
                 toast.add({
                     severity: 'success',
                     summary: 'Success',
-                    detail: 'Book updated successfully',
+                    detail: 'Mise à jour réussie du livre',
                     life: 3000
                 });
             },
@@ -511,7 +517,7 @@ const saveBook = () => {
                 toast.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'Failed to update book',
+                    detail: 'Échec de la mise à jour du livre',
                     life: 3000
                 });
             }
@@ -523,7 +529,7 @@ const saveBook = () => {
                 toast.add({
                     severity: 'success',
                     summary: 'Success',
-                    detail: 'Book created successfully',
+                    detail: 'Livre créé avec succès',
                     life: 3000
                 });
             },
@@ -531,7 +537,7 @@ const saveBook = () => {
                 toast.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'Failed to create book',
+                    detail: 'Échec de la création d\'un livre',
                     life: 3000
                 });
             }
@@ -541,12 +547,12 @@ const saveBook = () => {
 
 const confirmDeleteBook = (book: Book) => {
     confirm.require({
-        message: `Are you sure you want to delete "${book.title}"?`,
-        header: 'Delete Confirmation',
+        message: `Êtes-vous sûr de vouloir supprimer "${book.title}"?`,
+        header: 'Supprimer Confirmation',
         icon: 'pi pi-exclamation-triangle',
         rejectClass: 'p-button-secondary p-button-outlined',
-        rejectLabel: 'Cancel',
-        acceptLabel: 'Delete',
+        rejectLabel: 'Annuler',
+        acceptLabel: 'Supprimer',
         acceptClass: 'p-button-danger',
         accept: () => {
             router.delete(route('books.destroy', book.id), {
@@ -554,7 +560,7 @@ const confirmDeleteBook = (book: Book) => {
                     toast.add({
                         severity: 'success',
                         summary: 'Success',
-                        detail: 'Book deleted successfully',
+                        detail: 'Livre supprimé avec succès',
                         life: 3000
                     });
                 },
@@ -562,7 +568,7 @@ const confirmDeleteBook = (book: Book) => {
                     toast.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: 'Failed to delete book',
+                        detail: 'Échec de la suppression du livre',
                         life: 3000
                     });
                 }

@@ -36,57 +36,25 @@ class BookController extends Controller
         ]);
     }
 
-    public function create(): Response
-    {
-        $authors = Author::orderBy('last_name')
-                        ->orderBy('first_name')
-                        ->get(['id', 'first_name', 'last_name']);
-
-        return Inertia::render('Books/Create', [
-            'authors' => $authors,
-        ]);
-    }
-
     public function store(StoreBookRequest $request): RedirectResponse
     {
         Book::create($request->validated());
 
         return redirect()->route('books.index')
-            ->with('success', 'Book created successfully.');
-    }
-
-    public function show(Book $book): Response
-    {
-        $book->load('author');
-
-        return Inertia::render('Books/Show', [
-            'book' => $book,
-        ]);
-    }
-
-    public function edit(Book $book): Response
-    {
-        $authors = Author::orderBy('last_name')
-                        ->orderBy('first_name')
-                        ->get(['id', 'first_name', 'last_name']);
-
-        return Inertia::render('Books/Edit', [
-            'book' => $book,
-            'authors' => $authors,
-        ]);
+            ->with('success', 'Livre créé avec succès.');
     }
 
     public function update(UpdateBookRequest $request, Book $book): RedirectResponse
     {
         if(!$book) {
             return redirect()->route('books.index')
-                ->with('error', 'Book not found.');
+                ->with('error', 'Livre non trouvé.');
         }
 
         $book->update($request->validated());
 
         return redirect()->route('books.index')
-            ->with('success', 'Book updated successfully.');
+            ->with('success', 'Livre mis à jour avec succès.');
     }
 
     public function destroy(Book $book): RedirectResponse
@@ -94,6 +62,6 @@ class BookController extends Controller
         $book->delete();
 
         return redirect()->route('books.index')
-            ->with('success', 'Book deleted successfully.');
+            ->with('success', 'Livre supprimé avec succès.');
     }
 }

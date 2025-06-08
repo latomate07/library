@@ -31,35 +31,12 @@ class AuthorController extends Controller
         ]);
     }
 
-    public function create(): Response
-    {
-        return Inertia::render('Authors/Create');
-    }
-
     public function store(StoreAuthorRequest $request): RedirectResponse
     {
         Author::create($request->validated());
 
         return redirect()->route('authors.index')
-            ->with('success', 'Author created successfully.');
-    }
-
-    public function show(Author $author): Response
-    {
-        $author->load(['books' => function ($query) {
-            $query->orderBy('publication_date', 'desc');
-        }]);
-
-        return Inertia::render('Authors/Show', [
-            'author' => $author,
-        ]);
-    }
-
-    public function edit(Author $author): Response
-    {
-        return Inertia::render('Authors/Edit', [
-            'author' => $author,
-        ]);
+            ->with('success', 'Auteur créé avec succès.');
     }
 
     public function update(UpdateAuthorRequest $request, Author $author): RedirectResponse
@@ -67,18 +44,18 @@ class AuthorController extends Controller
         $author->update($request->validated());
 
         return redirect()->route('authors.index')
-            ->with('success', 'Author updated successfully.');
+            ->with('success', 'L\'auteur a été mis à jour avec succès.');
     }
 
     public function destroy(Author $author): RedirectResponse
     {
         if ($author->books()->exists()) {
-            return back()->with('error', 'Cannot delete author with existing books.');
+            return back()->with('error', 'Impossible de supprimer un auteur avec des livres existants.');
         }
 
         $author->delete();
 
         return redirect()->route('authors.index')
-            ->with('success', 'Author deleted successfully.');
+            ->with('success', 'Auteur supprimé avec succès.');
     }
 }

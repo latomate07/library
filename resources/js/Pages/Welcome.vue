@@ -15,7 +15,7 @@
                                 size="small" outlined />
                         </template>
                         <template v-else>
-                            <Button v-if="canLogin" label="Staff Login" icon="pi pi-sign-in"
+                            <Button v-if="canLogin" label="Connexion" icon="pi pi-sign-in"
                                 @click="router.visit(route('login'))" size="small" outlined />
                         </template>
                     </div>
@@ -28,17 +28,17 @@
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
                 <div class="flex items-center gap-4 justify-between">
                     <div class="flex items-center space-x-3">
-                        <Button label="Books" icon="pi pi-book" @click="switchView('books')"
+                        <Button label="Livres" icon="pi pi-book" @click="switchView('books')"
                             :severity="activeView === 'books' ? 'primary' : 'secondary'"
                             :outlined="activeView !== 'books'" size="small" />
-                        <Button label="Authors" icon="pi pi-users" @click="switchView('authors')"
+                        <Button label="Auteurs" icon="pi pi-users" @click="switchView('authors')"
                             :severity="activeView === 'authors' ? 'primary' : 'secondary'"
                             :outlined="activeView !== 'authors'" size="small" />
                     </div>
 
                     <InputGroup class="w-64">
                         <InputText v-model="searchTerm"
-                            :placeholder="activeView === 'books' ? 'Search books...' : 'Search authors...'"
+                            :placeholder="activeView === 'books' ? 'Trouver un livre...' : 'Trouver un auteur...'"
                             class="text-sm" />
                         <InputGroupAddon>
                             <i class="pi pi-search text-gray-400"></i>
@@ -60,9 +60,11 @@
                 <i :class="activeView === 'books' ? 'pi pi-book' : 'pi pi-users'"
                     class="text-5xl text-gray-300 mb-4"></i>
                 <h3 class="text-lg font-medium text-gray-900 mb-2">
-                    No {{ activeView }} found
+                    Aucun {{ activeView }} trouvé
                 </h3>
-                <p class="text-gray-500">Try a different search term.</p>
+                <p class="text-gray-500">
+                    Essayez de modifier votre recherche.
+                </p>
             </div>
 
             <!-- Books Grid -->
@@ -82,7 +84,7 @@
                                 {{ book.title }}
                             </h3>
                             <p class="text-xs text-gray-600 mb-2">
-                                {{ book.author?.full_name || 'Unknown' }}
+                                {{ book.author?.full_name || 'Inconnu' }}
                             </p>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm font-medium text-green-600">
@@ -115,11 +117,11 @@
                                 {{ author.full_name }}
                             </h3>
                             <p class="text-xs text-gray-600 mb-2">
-                                {{ author.nationality || 'Unknown origin' }}
+                                Nationalité: {{ author.nationality || 'Non connu' }}
                             </p>
                             <div class="flex items-center justify-between">
                                 <span class="text-xs text-gray-500">
-                                    {{ author.books_count || 0 }} {{ author.books_count === 1 ? 'book' : 'books' }}
+                                    {{ author.books_count || 0 }} {{ author.books_count === 1 ? 'livre' : 'livres' }}
                                 </span>
                                 <span v-if="author.birth_date" class="text-xs text-gray-500">
                                     {{ new Date(author.birth_date).getFullYear() }}
@@ -132,7 +134,7 @@
 
             <!-- Load More Button -->
             <div v-if="hasMore && !loading" class="text-center mt-8">
-                <Button label="Load More" icon="pi pi-chevron-down" @click="loadMore" outlined size="small" />
+                <Button label="Charger plus" icon="pi pi-chevron-down" @click="loadMore" outlined size="small" />
             </div>
 
             <!-- Loading More -->
@@ -151,23 +153,24 @@
                     </div>
                     <div class="flex-1">
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ selectedBook.title }}</h3>
-                        <p class="text-gray-600 mb-3">by {{ selectedBook.author?.full_name || 'Unknown Author' }}</p>
+                        <p class="text-gray-600 mb-3">par {{ selectedBook.author?.full_name || 'Auteur Inconnu' }}</p>
                         <div class="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                                <span class="font-medium text-gray-900">Price:</span>
-                                <span class="text-green-600 font-semibold ml-2">{{ formatCurrency(selectedBook.price)
-                                    }}</span>
+                                <span class="font-medium text-gray-900">Prix:</span>
+                                <span class="text-green-600 font-semibold ml-2">
+                                    {{ formatCurrency(selectedBook.price) }}
+                                </span>
                             </div>
                             <div>
-                                <span class="font-medium text-gray-900">Language:</span>
+                                <span class="font-medium text-gray-900">Langue:</span>
                                 <span class="ml-2">{{ selectedBook.language.toUpperCase() }}</span>
                             </div>
                             <div>
-                                <span class="font-medium text-gray-900">Published:</span>
+                                <span class="font-medium text-gray-900">Publication:</span>
                                 <span class="ml-2">{{ formatDate(selectedBook.publication_date) }}</span>
                             </div>
                             <div v-if="selectedBook.pages">
-                                <span class="font-medium text-gray-900">Pages:</span>
+                                <span class="font-medium text-gray-900">Nombre de pages:</span>
                                 <span class="ml-2">{{ selectedBook.pages }}</span>
                             </div>
                         </div>
@@ -199,15 +202,15 @@
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ selectedAuthor.full_name }}</h3>
                         <div class="grid grid-cols-2 gap-4 text-sm mb-3">
                             <div v-if="selectedAuthor.nationality">
-                                <span class="font-medium text-gray-900">Nationality:</span>
+                                <span class="font-medium text-gray-900">Nationalité:</span>
                                 <span class="ml-2">{{ selectedAuthor.nationality }}</span>
                             </div>
                             <div v-if="selectedAuthor.birth_date">
-                                <span class="font-medium text-gray-900">Born:</span>
+                                <span class="font-medium text-gray-900">Naissance:</span>
                                 <span class="ml-2">{{ formatDate(selectedAuthor.birth_date) }}</span>
                             </div>
                             <div>
-                                <span class="font-medium text-gray-900">Books:</span>
+                                <span class="font-medium text-gray-900">Livres:</span>
                                 <span class="ml-2">{{ selectedAuthor.books_count || 0 }}</span>
                             </div>
                         </div>
@@ -215,11 +218,11 @@
                 </div>
                 <Divider />
                 <div v-if="selectedAuthor.biography">
-                    <h4 class="font-medium text-gray-900 mb-2">Biography</h4>
+                    <h4 class="font-medium text-gray-900 mb-2">Biographie</h4>
                     <p class="text-gray-700 leading-relaxed">{{ selectedAuthor.biography }}</p>
                 </div>
                 <div v-if="selectedAuthor.books && selectedAuthor.books.length > 0">
-                    <h4 class="font-medium text-gray-900 mb-3">Published Works</h4>
+                    <h4 class="font-medium text-gray-900 mb-3">Ouvrages publiés</h4>
                     <div class="grid gap-2">
                         <div v-for="book in selectedAuthor.books" :key="book.id"
                             class="flex items-center justify-between p-2 bg-gray-50 rounded text-sm">

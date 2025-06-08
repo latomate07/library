@@ -7,12 +7,23 @@ use Spatie\Permission\Models\Permission;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
-    
+
     // Create permissions
-    Permission::create(['name' => 'view books']);
-    Permission::create(['name' => 'create books']);
-    Permission::create(['name' => 'update books']);
-    Permission::create(['name' => 'delete books']);
+    $permissions = [
+        'view authors',
+        'create authors',
+        'update authors',
+        'delete authors',
+        'view books',
+        'create books',
+        'update books',
+        'delete books',
+        'manage library',
+    ];
+
+    foreach ($permissions as $permission) {
+        Permission::create(['name' => $permission]);
+    }
 });
 
 test('user can view books index with permission', function () {
@@ -20,14 +31,14 @@ test('user can view books index with permission', function () {
     Book::factory()->count(3)->create();
 
     $response = $this->actingAs($this->user)
-                     ->get(route('books.index'));
+        ->get(route('books.index'));
 
     $response->assertStatus(200);
 });
 
 test('user cannot view books index without permission', function () {
     $response = $this->actingAs($this->user)
-                     ->get(route('books.index'));
+        ->get(route('books.index'));
 
     $response->assertStatus(403);
 });
@@ -45,7 +56,7 @@ test('user can create book with permission', function () {
     ];
 
     $response = $this->actingAs($this->user)
-                     ->post(route('books.store'), $bookData);
+        ->post(route('books.store'), $bookData);
 
     $response->assertRedirect(route('books.index'));
     $this->assertDatabaseHas('books', $bookData);
@@ -63,7 +74,7 @@ test('user cannot create book without permission', function () {
     ];
 
     $response = $this->actingAs($this->user)
-                     ->post(route('books.store'), $bookData);
+        ->post(route('books.store'), $bookData);
 
     $response->assertStatus(403);
 });
@@ -72,7 +83,7 @@ test('book creation validates required fields', function () {
     $this->user->givePermissionTo('create books');
 
     $response = $this->actingAs($this->user)
-                     ->post(route('books.store'), []);
+        ->post(route('books.store'), []);
 
     $response->assertSessionHasErrors(['title', 'price', 'publication_date', 'language', 'author_id']);
 });
@@ -89,7 +100,7 @@ test('book creation validates author exists', function () {
     ];
 
     $response = $this->actingAs($this->user)
-                     ->post(route('books.store'), $bookData);
+        ->post(route('books.store'), $bookData);
 
     $response->assertSessionHasErrors(['author_id']);
 });
@@ -108,7 +119,7 @@ test('user can update book with permission', function () {
     ];
 
     $response = $this->actingAs($this->user)
-                     ->put(route('books.update', $book), $updateData);
+        ->put(route('books.update', $book), $updateData);
 
     $response->assertRedirect(route('books.index'));
     $this->assertDatabaseHas('books', $updateData);
@@ -119,7 +130,7 @@ test('user can delete book with permission', function () {
     $book = Book::factory()->create();
 
     $response = $this->actingAs($this->user)
-                     ->delete(route('books.destroy', $book));
+        ->delete(route('books.destroy', $book));
 
     $response->assertRedirect(route('books.index'));
     $this->assertModelMissing($book);
@@ -128,7 +139,7 @@ test('user can delete book with permission', function () {
 test('isbn must be unique when provided', function () {
     $this->user->givePermissionTo('create books');
     $author = Author::factory()->create();
-    
+
     // Create first book with ISBN
     Book::factory()->create(['isbn' => '9781234567890']);
 
@@ -142,7 +153,7 @@ test('isbn must be unique when provided', function () {
     ];
 
     $response = $this->actingAs($this->user)
-                     ->post(route('books.store'), $bookData);
+        ->post(route('books.store'), $bookData);
 
     $response->assertSessionHasErrors(['isbn']);
 });

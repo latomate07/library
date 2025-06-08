@@ -49,18 +49,4 @@ class StoreAuthorRequest extends FormRequest
             ],
         ];
     }
-
-    /**
-     * Get the validation error messages.
-     *
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            'first_name.required' => 'Le prénom est requis.',
-            'last_name.required' => 'Le nom est requis.',
-            'birth_date.before' => 'La date de naissance doit être antérieure à aujourd\'hui.',
-        ];
-    }
 }

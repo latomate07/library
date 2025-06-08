@@ -8,40 +8,31 @@
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="pi pi-book text-2xl text-blue-600"></i>
-                                        <span class="text-xl font-bold text-gray-900">Library</span>
-                                    </div>
+                                <Link :href="route('home')">
+                                <div class="flex items-center space-x-2">
+                                    <i class="pi pi-book text-2xl text-blue-600"></i>
+                                    <span class="text-xl font-bold text-gray-900">Library</span>
+                                </div>
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink 
-                                    :href="route('dashboard')" 
-                                    :active="route().current('dashboard')"
-                                >
+                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     <i class="pi pi-home mr-2"></i>
-                                    Dashboard
+                                    Tableau de bord
                                 </NavLink>
-                                
-                                <NavLink 
-                                    v-if="canView('authors')"
-                                    :href="route('authors.index')" 
-                                    :active="route().current('authors.*')"
-                                >
+
+                                <NavLink v-if="canView('authors')" :href="route('authors.index')"
+                                    :active="route().current('authors.*')">
                                     <i class="pi pi-users mr-2"></i>
-                                    Authors
+                                    Auteurs
                                 </NavLink>
-                                
-                                <NavLink 
-                                    v-if="canView('books')"
-                                    :href="route('books.index')" 
-                                    :active="route().current('books.*')"
-                                >
+
+                                <NavLink v-if="canView('books')" :href="route('books.index')"
+                                    :active="route().current('books.*')">
                                     <i class="pi pi-book mr-2"></i>
-                                    Books
+                                    Livres
                                 </NavLink>
                             </div>
                         </div>
@@ -60,24 +51,16 @@
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
+                                            <button type="button"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
                                                 <i class="pi pi-user mr-2"></i>
                                                 {{ $page.props.auth.user.name }}
 
-                                                <svg
-                                                    class="-mr-0.5 ml-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
+                                                <svg class="-mr-0.5 ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd"
                                                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
+                                                        clip-rule="evenodd" />
                                                 </svg>
                                             </button>
                                         </span>
@@ -86,16 +69,14 @@
                                     <template #content>
                                         <DropdownLink :href="route('profile.edit')">
                                             <i class="pi pi-user mr-2"></i>
-                                            Profile
+                                            Profil
                                         </DropdownLink>
 
                                         <!-- Authentication -->
-                                        <form @submit.prevent="logout">
-                                            <DropdownLink as="button">
-                                                <i class="pi pi-sign-out mr-2"></i>
-                                                Log Out
-                                            </DropdownLink>
-                                        </form>
+                                        <DropdownLink as="button" :href="route('logout')" method="post">
+                                            <i class="pi pi-sign-out mr-2"></i>
+                                            Déconnexion
+                                        </DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
@@ -103,31 +84,19 @@
 
                         <!-- Hamburger -->
                         <div class="-mr-2 flex items-center sm:hidden">
-                            <button
-                                @click="showingNavigationDropdown = !showingNavigationDropdown"
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
+                            <button @click="showingNavigationDropdown = !showingNavigationDropdown"
+                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none">
                                 <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path
-                                        :class="{
-                                            hidden: showingNavigationDropdown,
-                                            'inline-flex': !showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
-                                            hidden: !showingNavigationDropdown,
-                                            'inline-flex': showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
+                                    <path :class="{
+                                        hidden: showingNavigationDropdown,
+                                        'inline-flex': !showingNavigationDropdown,
+                                    }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16" />
+                                    <path :class="{
+                                        hidden: !showingNavigationDropdown,
+                                        'inline-flex': showingNavigationDropdown,
+                                    }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>
@@ -135,35 +104,24 @@
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
-                    class="sm:hidden"
-                >
+                <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
+                    class="sm:hidden">
                     <div class="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink 
-                            :href="route('dashboard')" 
-                            :active="route().current('dashboard')"
-                        >
+                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             <i class="pi pi-home mr-2"></i>
                             Dashboard
                         </ResponsiveNavLink>
-                        
-                        <ResponsiveNavLink 
-                            v-if="canView('authors')"
-                            :href="route('authors.index')" 
-                            :active="route().current('authors.*')"
-                        >
+
+                        <ResponsiveNavLink v-if="canView('authors')" :href="route('authors.index')"
+                            :active="route().current('authors.*')">
                             <i class="pi pi-users mr-2"></i>
-                            Authors
+                            Auteurs
                         </ResponsiveNavLink>
-                        
-                        <ResponsiveNavLink 
-                            v-if="canView('books')"
-                            :href="route('books.index')" 
-                            :active="route().current('books.*')"
-                        >
+
+                        <ResponsiveNavLink v-if="canView('books')" :href="route('books.index')"
+                            :active="route().current('books.*')">
                             <i class="pi pi-book mr-2"></i>
-                            Books
+                            Livres
                         </ResponsiveNavLink>
                     </div>
 
@@ -181,16 +139,13 @@
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 <i class="pi pi-user mr-2"></i>
-                                Profile
+                                Profil
                             </ResponsiveNavLink>
 
                             <!-- Authentication -->
-                            <form method="POST" @submit.prevent="logout">
-                                <ResponsiveNavLink as="button">
-                                    <i class="pi pi-sign-out mr-2"></i>
-                                    Log Out
-                                </ResponsiveNavLink>
-                            </form>
+                            <Link :href="route('logout')" method="post" as="button"
+                                class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            Déconnexion</Link>
                         </div>
                     </div>
                 </div>
@@ -290,6 +245,7 @@ const page = usePage<PageProps>();
 const showingNavigationDropdown = ref(false);
 
 const logout = () => {
+    console.log(route('logout'));
     router.post(route('logout'));
 };
 

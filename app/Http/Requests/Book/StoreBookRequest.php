@@ -32,20 +32,4 @@ class StoreBookRequest extends FormRequest
             'author_id' => 'required|exists:authors,id',
         ];
     }
-
-    /**
-     * Get the validation error messages.
-     *
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            'title.required' => 'Le titre du livre est requis.',
-            'isbn.unique' => 'L\'ISBN doit être unique.',
-            'price.required' => 'Le prix du livre est requis.',
-            'publication_date.required' => 'La date de publication est requise.',
-            'author_id.exists' => 'L\'auteur sélectionné n\'existe pas.',
-        ];
-    }
 }

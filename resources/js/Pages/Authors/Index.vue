@@ -2,7 +2,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Authors Management
+                Gestion des Auteurs
             </h2>
         </template>
 
@@ -12,12 +12,14 @@
                     <template #content>
                         <Toolbar class="mb-6">
                             <template #start>
-                                <h3 class="text-lg font-medium text-gray-900">Authors</h3>
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    Auteurs
+                                </h3>
                             </template>
                             <template #end>
                                 <Button
                                     v-if="canCreate('authors')"
-                                    label="Add Author"
+                                    label="Nouveau"
                                     icon="pi pi-plus"
                                     @click="openNew"
                                     class="p-button-success"
@@ -33,17 +35,19 @@
                             :lazy="true"
                             @page="onPage"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} authors"
+                            currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} auteurs"
                             responsiveLayout="scroll"
                             :loading="loading"
                         >
                             <template #header>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-xl text-900 font-bold">Authors List</span>
+                                    <span class="text-xl text-900 font-bold">
+                                        Liste des auteurs
+                                    </span>
                                     <InputGroup>
                                         <InputText 
                                             v-model="searchTerm" 
-                                            placeholder="Search authors..." 
+                                            placeholder="Trouver un auteur..." 
                                             @input="onSearch"
                                         />
                                         <InputGroupAddon>
@@ -53,7 +57,7 @@
                                 </div>
                             </template>
 
-                            <Column field="full_name" header="Name" sortable>
+                            <Column field="full_name" header="Nom" sortable>
                                 <template #body="slotProps">
                                     <div class="flex items-center space-x-3">
                                         <div class="flex-shrink-0 h-10 w-10">
@@ -68,20 +72,20 @@
                                                 {{ slotProps.data.full_name }}
                                             </div>
                                             <div class="text-sm text-gray-500">
-                                                {{ slotProps.data.nationality || 'Not specified' }}
+                                                {{ slotProps.data.nationality || 'Non spécifié' }}
                                             </div>
                                         </div>
                                     </div>
                                 </template>
                             </Column>
 
-                            <Column field="birth_date" header="Birth Date" sortable>
+                            <Column field="birth_date" header="Date de naissance" sortable>
                                 <template #body="slotProps">
                                     {{ slotProps.data.birth_date ? formatDate(slotProps.data.birth_date) : '-' }}
                                 </template>
                             </Column>
 
-                            <Column field="books_count" header="Books" sortable>
+                            <Column field="books_count" header="Livres" sortable>
                                 <template #body="slotProps">
                                     <Tag :value="slotProps.data.books_count || 0" severity="info" />
                                 </template>
@@ -108,7 +112,7 @@
                                             icon="pi pi-trash"
                                             class="p-button-rounded p-button-text p-button-danger"
                                             @click="confirmDeleteAuthor(slotProps.data)"
-                                            v-tooltip="'Delete'"
+                                            v-tooltip="'Supprimer'"
                                         />
                                     </div>
                                 </template>
@@ -129,7 +133,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="field">
                                 <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">
-                                    First Name *
+                                    Prénom *
                                 </label>
                                 <InputText
                                     id="first_name"
@@ -146,7 +150,7 @@
 
                             <div class="field">
                                 <label for="last_name" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Last Name *
+                                    Nom *
                                 </label>
                                 <InputText
                                     id="last_name"
@@ -162,7 +166,7 @@
 
                             <div class="field">
                                 <label for="birth_date" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Birth Date
+                                    Date de naissance
                                 </label>
                                 <Calendar
                                     id="birth_date"
@@ -179,7 +183,7 @@
 
                             <div class="field">
                                 <label for="nationality" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Nationality
+                                    Nationalité
                                 </label>
                                 <InputText
                                     id="nationality"
@@ -195,7 +199,7 @@
 
                         <div class="field">
                             <label for="biography" class="block text-sm font-medium text-gray-700 mb-2">
-                                Biography
+                                Biographie
                             </label>
                             <Textarea
                                 id="biography"
@@ -212,13 +216,13 @@
 
                     <template #footer>
                         <Button 
-                            label="Cancel" 
+                            label="Annuler" 
                             icon="pi pi-times" 
                             @click="hideDialog" 
                             class="p-button-text" 
                         />
                         <Button 
-                            :label="isEditing ? 'Update' : 'Create'"
+                            :label="isEditing ? 'Mettre à jour' : 'Créer'"
                             icon="pi pi-check" 
                             @click="saveAuthor" 
                             :loading="form.processing"
@@ -232,7 +236,7 @@
                     :modal="true" 
                     :closable="true"
                     :style="{ width: '50vw' }"
-                    header="Author Details"
+                    header="Détails de l'Auteur"
                 >
                     <div v-if="selectedAuthor" class="space-y-4">
                         <div class="flex items-center space-x-4 pb-4 border-b">
@@ -243,30 +247,30 @@
                             </div>
                             <div>
                                 <h3 class="text-xl font-semibold">{{ selectedAuthor.full_name }}</h3>
-                                <p class="text-gray-600">{{ selectedAuthor.nationality || 'Nationality not specified' }}</p>
+                                <p class="text-gray-600">{{ selectedAuthor.nationality || 'Non spécifié' }}</p>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-500">Birth Date</label>
-                                <p>{{ selectedAuthor.birth_date ? formatDate(selectedAuthor.birth_date) : 'Not specified' }}</p>
+                                <label class="block text-sm font-medium text-gray-500">Date de naissance</label>
+                                <p>{{ selectedAuthor.birth_date ? formatDate(selectedAuthor.birth_date) : 'Non spécifié' }}</p>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-500">Books Count</label>
-                                <p>{{ selectedAuthor.books_count || 0 }} books</p>
+                                <label class="block text-sm font-medium text-gray-500">Nombre de livres</label>
+                                <p>{{ selectedAuthor.books_count || 0 }} livres</p>
                             </div>
                         </div>
 
                         <div v-if="selectedAuthor.biography">
-                            <label class="block text-sm font-medium text-gray-500 mb-2">Biography</label>
+                            <label class="block text-sm font-medium text-gray-500 mb-2">Biographie</label>
                             <p class="text-gray-900">{{ selectedAuthor.biography }}</p>
                         </div>
                     </div>
 
                     <template #footer>
                         <Button 
-                            label="Close" 
+                            label="Fermer" 
                             icon="pi pi-times" 
                             @click="viewDialog = false" 
                             class="p-button-text" 
@@ -332,7 +336,7 @@ watch(birthDateModel, (newDate) => {
 
 // Computed properties
 const dialogTitle = computed(() => {
-    return isEditing.value ? 'Edit Author' : 'Add New Author';
+    return isEditing.value ? 'Modifier un auteur' : 'Nouveau';
 });
 
 // Methods
@@ -383,7 +387,7 @@ const saveAuthor = () => {
                 toast.add({
                     severity: 'success',
                     summary: 'Success',
-                    detail: 'Author updated successfully',
+                    detail: 'Auteur mis à jour avec succès',
                     life: 3000
                 });
             },
@@ -391,7 +395,7 @@ const saveAuthor = () => {
                 toast.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'Failed to update author',
+                    detail: 'La mise à jour de l\'auteur a échoué',
                     life: 3000
                 });
             }
@@ -403,7 +407,7 @@ const saveAuthor = () => {
                 toast.add({
                     severity: 'success',
                     summary: 'Success',
-                    detail: 'Author created successfully',
+                    detail: 'Auteur créé avec succès',
                     life: 3000
                 });
             },
@@ -411,7 +415,7 @@ const saveAuthor = () => {
                 toast.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'Failed to create author',
+                    detail: 'Échec de la création d\'un auteur',
                     life: 3000
                 });
             }
@@ -421,12 +425,12 @@ const saveAuthor = () => {
 
 const confirmDeleteAuthor = (author: Author) => {
     confirm.require({
-        message: `Are you sure you want to delete ${author.full_name}?`,
-        header: 'Delete Confirmation',
+        message: `Êtes-vous sûr de vouloir supprimer ${author.full_name}?`,
+        header: 'Supprimer Confirmation',
         icon: 'pi pi-exclamation-triangle',
         rejectClass: 'p-button-secondary p-button-outlined',
-        rejectLabel: 'Cancel',
-        acceptLabel: 'Delete',
+        rejectLabel: 'Annuler',
+        acceptLabel: 'Supprimer',
         acceptClass: 'p-button-danger',
         accept: () => {
             router.delete(route('authors.destroy', author.id), {
@@ -434,7 +438,7 @@ const confirmDeleteAuthor = (author: Author) => {
                     toast.add({
                         severity: 'success',
                         summary: 'Success',
-                        detail: 'Author deleted successfully',
+                        detail: 'Auteur supprimé avec succès',
                         life: 3000
                     });
                 },
@@ -442,7 +446,7 @@ const confirmDeleteAuthor = (author: Author) => {
                     toast.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: 'Failed to delete author',
+                        detail: 'Échec de la suppression de l\'auteur',
                         life: 3000
                     });
                 }

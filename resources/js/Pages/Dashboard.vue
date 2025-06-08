@@ -2,7 +2,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Dashboard
+                Tableau de bord
             </h2>
         </template>
 
@@ -12,10 +12,11 @@
                     <div class="p-6 text-gray-900">
                         <div class="mb-8">
                             <h1 class="text-3xl font-bold text-gray-900 mb-4">
-                                📚 Library Management System
+                                Management de la Bibliothèque
                             </h1>
                             <p class="text-lg text-gray-600">
-                                Welcome to your library management dashboard. Manage authors and books efficiently.
+                                Bienvenue sur le tableau de bord de gestion de la bibliothèque. Ici, vous pouvez
+                                gérer les auteurs et les livres de la bibliothèque.
                             </p>
                         </div>
 
@@ -28,9 +29,9 @@
                                             <i class="pi pi-users text-3xl text-blue-600"></i>
                                         </div>
                                         <div class="ml-6">
-                                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Authors</h3>
-                                            <p class="text-gray-600 mb-4">Manage author information and profiles</p>
-                                            <Button v-if="canView('authors')" label="View Authors"
+                                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Auteurs</h3>
+                                            <p class="text-gray-600 mb-4">Gérer les informations et les profils des auteurs</p>
+                                            <Button v-if="canView('authors')" label="Voir les auteurs"
                                                 icon="pi pi-arrow-right" @click="router.visit(route('authors.index'))"
                                                 class="p-button-outlined" />
                                         </div>
@@ -46,9 +47,9 @@
                                             <i class="pi pi-book text-3xl text-green-600"></i>
                                         </div>
                                         <div class="ml-6">
-                                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Books</h3>
-                                            <p class="text-gray-600 mb-4">Manage your book catalog and inventory</p>
-                                            <Button v-if="canView('books')" label="View Books" icon="pi pi-arrow-right"
+                                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Livres</h3>
+                                            <p class="text-gray-600 mb-4">Gérer votre catalogue de livres et vos stocks</p>
+                                            <Button v-if="canView('books')" label="Voir les livres" icon="pi pi-arrow-right"
                                                 @click="router.visit(route('books.index'))" class="p-button-outlined" />
                                         </div>
                                     </div>
